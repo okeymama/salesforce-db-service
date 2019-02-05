@@ -21,7 +21,6 @@ import com.abbvie.salesforce.dto.StudyInfoTeslaDTO;
 import com.abbvie.salesforce.entity.AvStudyC;
 import com.abbvie.salesforce.entity.IdrpConfigRuleC;
 import com.abbvie.salesforce.entity.PlanKeyEventC;
-import com.abbvie.salesforce.entity.PlanKeyPersonnelC;
 import com.abbvie.salesforce.entity.StudyKeyEventC;
 import com.abbvie.salesforce.entity.StudyPersonnelConfigurationC;
 import com.abbvie.salesforce.repository.AvStudyCRepository;
@@ -46,9 +45,6 @@ public class StudyInfoTeslaService {
 	
 	@Autowired
 	private StudyPersonnelConfigurationCRepository studyPersonnelConfigurationCRepository;
-	
-	@Autowired
-	private PlanKeyPersonnelCRepository planKeyPersonnelCRepository;
 	
 	@Autowired
 	private IdrpConfigRuleCRepository idrpConfigRuleCRepository;

@@ -20,3 +20,4 @@ public interface PlanKeyPersonnelCRepository extends JpaRepository<PlanKeyPerson
 	public List<PlanKeyPersonnelC> findByRoleC(List<String> roleIds);
 	
 }
+	
