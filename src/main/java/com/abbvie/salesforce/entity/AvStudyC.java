@@ -116,10 +116,10 @@ public class AvStudyC implements Serializable {
 	private String avNicknameC;
 
 	@Column(name="av_number_of_planned_study_sites_in_sa__c")
-	private double avNumberOfPlannedStudySitesInSaC;
+	private Double avNumberOfPlannedStudySitesInSaC;
 
 	@Column(name="av_number_of_treatment_arms__c")
-	private double avNumberOfTreatmentArmsC;
+	private Double avNumberOfTreatmentArmsC;
 
 	@Column(name="av_paid__c")
 	private String avPaidC;
@@ -277,13 +277,13 @@ public class AvStudyC implements Serializable {
 	private String avStudyTypeC;
 
 	@Column(name="av_subject_age_lower_limit__c")
-	private double avSubjectAgeLowerLimitC;
+	private Double avSubjectAgeLowerLimitC;
 
 	@Column(name="av_subject_age_lower_limit_unit__c")
 	private String avSubjectAgeLowerLimitUnitC;
 
 	@Column(name="av_subject_age_upper_limit__c")
-	private double avSubjectAgeUpperLimitC;
+	private Double avSubjectAgeUpperLimitC;
 
 	@Column(name="av_subject_age_upper_limit_unit__c")
 	private String avSubjectAgeUpperLimitUnitC;

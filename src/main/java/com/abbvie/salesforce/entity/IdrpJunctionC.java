@@ -23,7 +23,7 @@ public class IdrpJunctionC implements Serializable {
 
 	@Id
 	@Column(name="id")
-	private Integer id;
+	private String id;
 
 	@Column(name="_hc_err")
 	private String hcErr;

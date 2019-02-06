@@ -26,7 +26,6 @@ import com.abbvie.salesforce.entity.StudyPersonnelConfigurationC;
 import com.abbvie.salesforce.repository.AvStudyCRepository;
 import com.abbvie.salesforce.repository.IdrpConfigRuleCRepository;
 import com.abbvie.salesforce.repository.PlanKeyEventCRepository;
-import com.abbvie.salesforce.repository.PlanKeyPersonnelCRepository;
 import com.abbvie.salesforce.repository.StudyKeyEventCRepository;
 import com.abbvie.salesforce.repository.StudyPersonnelConfigurationCRepository;
 
@@ -72,7 +71,7 @@ public class StudyInfoTeslaService {
 				referenceDTO.setTherapeuticArea(avStudyC.getAvRelatedTherapeuticAreaC());
 				studyInfoTeslaDTO.setReferenceDTO(referenceDTO);
 
-				List<StudyKeyEventC> studyKeyEventCs = studyKeyEventCRepository.findByidrpConfigRuleC(idrpConfigRuleC.getId());
+				List<StudyKeyEventC> studyKeyEventCs = studyKeyEventCRepository.findByidrpConfigRuleC(idrpConfigRuleC.getSfid());
 				if(!CollectionUtils.isEmpty(studyKeyEventCs)) {
 					List<String> eventIds= studyKeyEventCs.stream().map(StudyKeyEventC::getEventC).collect(Collectors.toList());
 					List<PlanKeyEventC> planKeyEventCs = planKeyEventCRepository.findByEventCIn(eventIds);
@@ -89,15 +88,15 @@ public class StudyInfoTeslaService {
 					}
 				}
 				
-				List<StudyPersonnelConfigurationC> studyPersonnelConfigurationCs = studyPersonnelConfigurationCRepository.findByIdrpConfigRuleC(idrpConfigRuleC.getId());
+				List<StudyPersonnelConfigurationC> studyPersonnelConfigurationCs = studyPersonnelConfigurationCRepository.findByIdrpConfigRuleC(idrpConfigRuleC.getSfid());
 				if(!CollectionUtils.isEmpty(studyPersonnelConfigurationCs)) {
 					Map<String,List<String>> personalAssignmentMap = new HashMap<>();;
 					for(StudyPersonnelConfigurationC studyPersonnelConfigurationC : studyPersonnelConfigurationCs) {
 							List<String> value = new ArrayList<>();
-							if(null != studyPersonnelConfigurationC.getApproverC()) {
+							if(studyPersonnelConfigurationC.getApproverC()) {
 								value.add("A");
 							}
-							if(null != studyPersonnelConfigurationC.getReviewerC()) {
+							if(studyPersonnelConfigurationC.getReviewerC()) {
 								value.add("R");
 							}
 							personalAssignmentMap.put(studyPersonnelConfigurationC.getName(), value);

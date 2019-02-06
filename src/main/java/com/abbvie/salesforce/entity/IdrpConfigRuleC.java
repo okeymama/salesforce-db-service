@@ -35,7 +35,7 @@ public class IdrpConfigRuleC implements Serializable {
 	private String hcLastop;
 
 	@Column(name="check_completion_window__c")
-	private double checkCompletionWindowC;
+	private Double checkCompletionWindowC;
 
 	@Column(name="compound__c")
 	private String compoundC;
@@ -70,7 +70,7 @@ public class IdrpConfigRuleC implements Serializable {
 	private String planOwnerC;
 
 	@Column(name="review_workflow_window__c")
-	private double reviewWorkflowWindowC;
+	private Double reviewWorkflowWindowC;
 
 	@Column(name="rule_id__c")
 	private String ruleIdC;
@@ -88,13 +88,13 @@ public class IdrpConfigRuleC implements Serializable {
 	private String taC;
 
 	@Column(name="task_priority_high__c")
-	private double taskPriorityHighC;
+	private Double taskPriorityHighC;
 
 	@Column(name="task_priority_low__c")
-	private double taskPriorityLowC;
+	private Double taskPriorityLowC;
 
 	@Column(name="task_priority_medium__c")
-	private double taskPriorityMediumC;
+	private Double taskPriorityMediumC;
 	
 	@Column(name="isdeleted")
 	private Boolean isdeleted;
