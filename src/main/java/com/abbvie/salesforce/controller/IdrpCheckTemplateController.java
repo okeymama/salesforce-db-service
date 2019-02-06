@@ -7,16 +7,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abbvie.salesforce.dto.IdrpTemplatesCDTO;
-import com.abbvie.salesforce.dto.StudyInfoTeslaDTO;
 import com.abbvie.salesforce.service.IdrpCheckTemplateService;
-import com.abbvie.salesforce.service.StudyInfoTeslaService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,13 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/IDRPCheckTemplateController")
+@CrossOrigin(value ="*")
 public class IdrpCheckTemplateController {
 
 	@Autowired
 	private IdrpCheckTemplateService idrpCheckTemplatesService;
 	
-	@PostMapping("/getAllIDRPCheckTemplates")
-	 public @ResponseBody ResponseEntity<List<IdrpTemplatesCDTO>> getAllIDRPCheckTemplates(){
+	@GetMapping("/getAllIDRPCheckTemplates")
+	 public ResponseEntity<List<IdrpTemplatesCDTO>> getAllIDRPCheckTemplates(){
 		log.info("Inside IDRPCheckTemplateController.getAllIDRPCheckTemplates: ");
 		List<IdrpTemplatesCDTO> idrpCheckTemplatesDTOs = idrpCheckTemplatesService.getAllIDRPCheckTemplates();
 		return ResponseEntity.ok(idrpCheckTemplatesDTOs);

@@ -52,62 +52,81 @@ public class StudyInfoTeslaService {
 	private StudyKeyEventCRepository studyKeyEventCRepository;
 	
 
-	public @ResponseBody List<StudyInfoTeslaDTO> getStudyInfoTeslaDTOList(@RequestBody List<String> studyNumbers) {
-		List<KeyEventsDTO> keyEventsDTOs = null;
-		KeyEventsDTO keyEventsDTO = null;
-		List<StudyInfoTeslaDTO> studyInfoTeslaDTOList = new ArrayList<>();	
-		for(String studyNumber : studyNumbers) {
-			StudyInfoTeslaDTO studyInfoTeslaDTO = new StudyInfoTeslaDTO();
-			AvStudyC avStudyC = avStudyCRepository.findByAvStudyNumberC(studyNumber);
-			IdrpConfigRuleC idrpConfigRuleC = idrpConfigRuleCRepository.findByStudyNumberC(studyNumber);
-			if(null != idrpConfigRuleC) {
-				ReferenceDTO referenceDTO = new ReferenceDTO();
-				referenceDTO.setCompound(idrpConfigRuleC.getCompoundC());
-				referenceDTO.setFullProtocalTitle(avStudyC.getAvProtocolTitleC());
-				referenceDTO.setIndication(idrpConfigRuleC.getIndicationC());
-				referenceDTO.setStudyPhase(avStudyC.getAvStudyPhaseC());
-				referenceDTO.setStudyStatus(avStudyC.getAvStudyStatusC());
-				referenceDTO.setStudyType(avStudyC.getAvStudyTypeC());
-				referenceDTO.setTherapeuticArea(avStudyC.getAvRelatedTherapeuticAreaC());
-				studyInfoTeslaDTO.setReferenceDTO(referenceDTO);
+	public @ResponseBody StudyInfoTeslaDTO getStudyInfoTeslaDTOList(@RequestBody String studyNumber) {
+		StudyInfoTeslaDTO studyInfoTeslaDTO = new StudyInfoTeslaDTO();
+		AvStudyC avStudyC = avStudyCRepository.findByAvStudyNumberC(studyNumber);
+		IdrpConfigRuleC idrpConfigRuleC = idrpConfigRuleCRepository.findByStudyNumberC(studyNumber);
+		if(null != idrpConfigRuleC) {
+			
+			ReferenceDTO referenceDTO = new ReferenceDTO();
+			referenceDTO.setCompound(idrpConfigRuleC.getCompoundC());
+			referenceDTO.setFullProtocalTitle(avStudyC.getAvProtocolTitleC());
+			referenceDTO.setIndication(idrpConfigRuleC.getIndicationC());
+			referenceDTO.setStudyPhase(avStudyC.getAvStudyPhaseC());
+			referenceDTO.setStudyStatus(avStudyC.getAvStudyStatusC());
+			referenceDTO.setStudyType(avStudyC.getAvStudyTypeC());
+			referenceDTO.setTherapeuticArea(avStudyC.getAvRelatedTherapeuticAreaC());
+			studyInfoTeslaDTO.setReferenceDTO(referenceDTO);
 
-				List<StudyKeyEventC> studyKeyEventCs = studyKeyEventCRepository.findByidrpConfigRuleC(idrpConfigRuleC.getSfid());
-				if(!CollectionUtils.isEmpty(studyKeyEventCs)) {
-					List<String> eventIds= studyKeyEventCs.stream().map(StudyKeyEventC::getEventC).collect(Collectors.toList());
-					List<PlanKeyEventC> planKeyEventCs = planKeyEventCRepository.findByEventCIn(eventIds);
-					if(!CollectionUtils.isEmpty(planKeyEventCs)) {
-						keyEventsDTOs = new ArrayList<>();
-						for(PlanKeyEventC planKeyEventC : planKeyEventCs) {
-							keyEventsDTO = new KeyEventsDTO();
-							keyEventsDTO.setActualDate(planKeyEventC.getActualDateC());;
-							keyEventsDTO.setEventName(planKeyEventC.getName());
-							keyEventsDTO.setPlannedDate(planKeyEventC.getPlannedDateC());
-							keyEventsDTOs.add(keyEventsDTO);
-						}
-						studyInfoTeslaDTO.setKeyEventsDTO(keyEventsDTOs);
-					}
-				}
-				
-				List<StudyPersonnelConfigurationC> studyPersonnelConfigurationCs = studyPersonnelConfigurationCRepository.findByIdrpConfigRuleC(idrpConfigRuleC.getSfid());
-				if(!CollectionUtils.isEmpty(studyPersonnelConfigurationCs)) {
-					Map<String,List<String>> personalAssignmentMap = new HashMap<>();;
-					for(StudyPersonnelConfigurationC studyPersonnelConfigurationC : studyPersonnelConfigurationCs) {
-							List<String> value = new ArrayList<>();
-							if(studyPersonnelConfigurationC.getApproverC()) {
-								value.add("A");
-							}
-							if(studyPersonnelConfigurationC.getReviewerC()) {
-								value.add("R");
-							}
-							personalAssignmentMap.put(studyPersonnelConfigurationC.getName(), value);
-						studyInfoTeslaDTO.setPersonalAssignmentMap(personalAssignmentMap);
-					}
-					
-				}
-			}
-			studyInfoTeslaDTOList.add(studyInfoTeslaDTO);
+			setStudyKeyEventCs(studyInfoTeslaDTO, idrpConfigRuleC);
+
+			setStudyPersonnelConfigurationCs(studyInfoTeslaDTO, idrpConfigRuleC);
+			
 		}
-		return studyInfoTeslaDTOList;
+
+		return studyInfoTeslaDTO;
 	}
+
+
+	/**
+	 * @param studyInfoTeslaDTO
+	 * @param idrpConfigRuleC
+	 */
+	private void setStudyKeyEventCs(StudyInfoTeslaDTO studyInfoTeslaDTO, IdrpConfigRuleC idrpConfigRuleC) {
+		List<KeyEventsDTO> keyEventsDTOs;
+		KeyEventsDTO keyEventsDTO;
+		List<StudyKeyEventC> studyKeyEventCs = studyKeyEventCRepository.findByidrpConfigRuleC(idrpConfigRuleC.getSfid());
+		if(!CollectionUtils.isEmpty(studyKeyEventCs)) {
+			List<String> eventIds= studyKeyEventCs.stream().map(StudyKeyEventC::getEventC).collect(Collectors.toList());
+			List<PlanKeyEventC> planKeyEventCs = planKeyEventCRepository.findByEventCIn(eventIds);
+			if(!CollectionUtils.isEmpty(planKeyEventCs)) {
+				keyEventsDTOs = new ArrayList<>();
+				for(PlanKeyEventC planKeyEventC : planKeyEventCs) {
+					keyEventsDTO = new KeyEventsDTO();
+					keyEventsDTO.setActualDate(planKeyEventC.getActualDateC());;
+					keyEventsDTO.setEventName(planKeyEventC.getName());
+					keyEventsDTO.setPlannedDate(planKeyEventC.getPlannedDateC());
+					keyEventsDTOs.add(keyEventsDTO);
+				}
+				studyInfoTeslaDTO.setKeyEventsDTO(keyEventsDTOs);
+			}
+		}
+	}
+
+
+	/**
+	 * @param studyInfoTeslaDTO
+	 * @param idrpConfigRuleC
+	 */
+	private void setStudyPersonnelConfigurationCs(StudyInfoTeslaDTO studyInfoTeslaDTO,
+			IdrpConfigRuleC idrpConfigRuleC) {
+		List<StudyPersonnelConfigurationC> studyPersonnelConfigurationCs = studyPersonnelConfigurationCRepository.findByIdrpConfigRuleC(idrpConfigRuleC.getSfid());
+		if(!CollectionUtils.isEmpty(studyPersonnelConfigurationCs)) {
+			Map<String,List<String>> personalAssignmentMap = new HashMap<>();;
+			for(StudyPersonnelConfigurationC studyPersonnelConfigurationC : studyPersonnelConfigurationCs) {
+				List<String> value = new ArrayList<>();
+				if(studyPersonnelConfigurationC.getApproverC()) {
+					value.add("A");
+				}
+				if(studyPersonnelConfigurationC.getReviewerC()) {
+					value.add("R");
+				}
+				personalAssignmentMap.put(studyPersonnelConfigurationC.getName(), value);
+				studyInfoTeslaDTO.setPersonalAssignmentMap(personalAssignmentMap);
+			}
+		}
+	}
+	
+	
 
 }
